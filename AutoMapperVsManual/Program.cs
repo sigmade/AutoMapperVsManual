@@ -1,20 +1,30 @@
-﻿// See https://aka.ms/new-console-template for more information
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapperVsManual;
+using System.Diagnostics;
 
-Console.WriteLine("Hello, World!");
 
 var config = new MapperConfiguration(cfg => {
-    cfg.CreateMap<Driver, Insured>();
+    cfg.CreateMap<Source, Dest>();
 });
 
 IMapper mapper = config.CreateMapper();
 
+var source = DataGen.NewSource();
+var timer = new Stopwatch();
 
-var driver = new Driver { Id = 1, DriveClass = 2};
+timer.Start();
+var dest = source.ToDest();
+timer.Stop();
+TimeSpan timeSpan = timer.Elapsed;
+Console.WriteLine($"StaticMethod {timeSpan:s\\.ffff} sec");
+
+timer.Restart();
 
 
-var insured = driver.ToInsured();
-var insuredAM = mapper.Map<Driver, Insured>(driver);
+var destAM = mapper.Map<Source, Dest>(source);
+timer.Stop();
+TimeSpan timeSpan2 = timer.Elapsed;
 
-Console.WriteLine(insuredAM);
+Console.WriteLine($"Automapper {timeSpan2:s\\.ffff} sec");
+
+Console.ReadKey();
