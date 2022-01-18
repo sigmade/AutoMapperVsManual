@@ -1,0 +1,2 @@
+Automapper vs StaticMethod
+
